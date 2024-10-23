@@ -8,7 +8,6 @@ import { StudentStore } from '../../data-access/student.store';
 import { Student } from '../../model/student.model';
 import { CardComponent } from '../../ui/card/card.component';
 import { ListItemComponent } from '../../ui/list-item/list-item.component';
-import { TypedTemplateDirective } from '../../directives/typed-template.directive';
 
 @Component({
   selector: 'app-student-card',
@@ -18,7 +17,7 @@ import { TypedTemplateDirective } from '../../directives/typed-template.directiv
       [list]="students()"
       (addNewItem)="handleAddItem()">
       <img src="assets/img/student.webp" width="200px" />
-      <ng-template [typedTemplate]="typeToken" let-item>
+      <ng-template let-item>
         <app-list-item (deleteItem)="handleDeleteItem(item)">
           {{ item.firstName }}
         </app-list-item>
@@ -35,16 +34,12 @@ import { TypedTemplateDirective } from '../../directives/typed-template.directiv
       }
     `,
   ],
-  imports: [CardComponent, ListItemComponent, TypedTemplateDirective],
+  imports: [CardComponent, ListItemComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StudentCardComponent {
   #http = inject(FakeHttpService);
   #store = inject(StudentStore);
-
-  typeToken!: {
-    $implicit: Student;
-  };
 
   students = toSignal(this.#store.students$);
 

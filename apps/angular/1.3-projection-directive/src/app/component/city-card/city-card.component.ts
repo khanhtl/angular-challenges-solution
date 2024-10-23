@@ -1,26 +1,25 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { CityStore } from '../../data-access/city.store';
 import {
   FakeHttpService,
-  randStudent,
+  randomCity,
 } from '../../data-access/fake-http.service';
-import { StudentStore } from '../../data-access/student.store';
-import { Student } from '../../model/student.model';
+import { City } from '../../model/city.model';
 import { CardComponent } from '../../ui/card/card.component';
 import { ListItemComponent } from '../../ui/list-item/list-item.component';
-import { TypedTemplateDirective } from '../../directives/typed-template.directive';
 
 @Component({
-  selector: 'app-student-card',
+  selector: 'app-city-card',
   template: `
     <app-card
-      class="bg-light-green"
-      [list]="students()"
+      class="bg-light-yellow"
+      [list]="cities()"
       (addNewItem)="handleAddItem()">
-      <img src="assets/img/student.webp" width="200px" />
-      <ng-template [typedTemplate]="typeToken" let-item>
+      <img src="assets/img/city.png" width="200px" />
+      <ng-template let-item>
         <app-list-item (deleteItem)="handleDeleteItem(item)">
-          {{ item.firstName }}
+          {{ item.name }}
         </app-list-item>
       </ng-template>
     </app-card>
@@ -29,35 +28,32 @@ import { TypedTemplateDirective } from '../../directives/typed-template.directiv
   styles: [
     `
       :host {
-        .bg-light-green {
-          background-color: rgba(0, 250, 0, 0.1);
+        .bg-light-yellow {
+          background-color: rgba(255, 250, 0, 0.1);
         }
       }
     `,
   ],
-  imports: [CardComponent, ListItemComponent, TypedTemplateDirective],
+  imports: [CardComponent, ListItemComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StudentCardComponent {
+export class CityCardComponent {
   #http = inject(FakeHttpService);
-  #store = inject(StudentStore);
+  #store = inject(CityStore);
 
-  typeToken!: {
-    $implicit: Student;
-  };
-
-  students = toSignal(this.#store.students$);
+  cities = toSignal(this.#store.cities$);
 
   constructor() {
-    this.#http.fetchStudents$
+    this.#http.fetchCities$
       .pipe(takeUntilDestroyed())
       .subscribe((s) => this.#store.addAll(s));
   }
-  handleDeleteItem(item: Student) {
+
+  handleDeleteItem(item: City) {
     this.#store.deleteOne(item.id);
   }
 
   handleAddItem() {
-    this.#store.addOne(randStudent());
+    this.#store.addOne(randomCity());
   }
 }

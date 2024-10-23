@@ -5,6 +5,7 @@ import {
   FakeHttpService,
   randomCity,
 } from '../../data-access/fake-http.service';
+import { TypedTemplateDirective } from '../../directives/typed-template.directive';
 import { City } from '../../model/city.model';
 import { CardComponent } from '../../ui/card/card.component';
 import { ListItemComponent } from '../../ui/list-item/list-item.component';
@@ -17,7 +18,7 @@ import { ListItemComponent } from '../../ui/list-item/list-item.component';
       [list]="cities()"
       (addNewItem)="handleAddItem()">
       <img src="assets/img/city.png" width="200px" />
-      <ng-template let-item>
+      <ng-template [typedTemplate]="typeToken" let-item>
         <app-list-item (deleteItem)="handleDeleteItem(item)">
           {{ item.name }}
         </app-list-item>
@@ -34,12 +35,16 @@ import { ListItemComponent } from '../../ui/list-item/list-item.component';
       }
     `,
   ],
-  imports: [CardComponent, ListItemComponent],
+  imports: [CardComponent, ListItemComponent, TypedTemplateDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CityCardComponent {
   #http = inject(FakeHttpService);
   #store = inject(CityStore);
+
+  typeToken!: {
+    $implicit: City;
+  };
 
   cities = toSignal(this.#store.cities$);
 
