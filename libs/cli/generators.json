@@ -1,0 +1,14 @@
+{
+  "generators": {
+    "challenge": {
+      "factory": "./src/generators/challenge/generator",
+      "schema": "./src/generators/challenge/schema.json",
+      "description": "challenge generator"
+    },
+    "readme": {
+      "factory": "./src/generators/readme/generator",
+      "schema": "./src/generators/readme/schema.json",
+      "description": "readme generator"
+    }
+  }
+}

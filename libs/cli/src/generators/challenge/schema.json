@@ -1,0 +1,124 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "GeneratorNxChallenge",
+  "title": "Creates the setup for a new Angular Challenge.",
+  "description": "Creates the boilerplate for an Angular Challenge.",
+  "type": "object",
+  "cli": "nx",
+  "properties": {
+    "title": {
+      "description": "Title of your challenge.",
+      "type": "string",
+      "maxLength": "25",
+      "$default": {
+        "$source": "argv",
+        "index": 1
+      },
+      "x-priority": "important",
+      "x-prompt": "What should be the title of your challenge?",
+      "pattern": "^[a-zA-Z].*$"
+    },
+    "author": {
+      "description": "Your full name",
+      "type": "string",
+      "maxLength": "25",
+      "x-priority": "important",
+      "x-prompt": "Author?"
+    },
+    "challengeDifficulty": {
+      "description": "The difficulty of the challenge.",
+      "type": "string",
+      "x-priority": "important",
+      "x-prompt": {
+        "message": "Which category would you like?",
+        "type": "list",
+        "items": [
+          {
+            "value": "🟢",
+            "label": "Easy"
+          },
+          {
+            "value": "🟠",
+            "label": "Medium"
+          },
+          {
+            "value": "🔴",
+            "label": "Hard"
+          }
+        ]
+      }
+    },
+    "category": {
+      "type": "string",
+      "description": "The category of your challenge.",
+      "x-priority": "important",
+      "x-prompt": {
+        "message": "Which category would you like?",
+        "type": "list",
+        "items": [
+          {
+            "value": "angular",
+            "label": "Angular"
+          },
+          {
+            "value": "performance",
+            "label": "Angular Performance"
+          },
+          {
+            "value": "ngrx",
+            "label": "NgRx"
+          },
+          {
+            "value": "rxjs",
+            "label": "RxJs"
+          },
+          {
+            "value": "nx",
+            "label": "Nx"
+          },
+          {
+            "value": "testing",
+            "label": "Testing"
+          },
+          {
+            "value": "typescript",
+            "label": "Typescript"
+          },
+          {
+            "value": "forms",
+            "label": "Forms"
+          },
+          {
+            "value": "signal",
+            "label": "Signal"
+          }
+        ]
+      }
+    },
+    "challengeNumber": {
+      "description": "Specify a challenge number (If you don't, the challenge number will be set automatically)",
+      "type": "number"
+    },
+    "addTest": {
+      "description": "add spec files.",
+      "type": "boolean",
+      "default": true,
+      "alias": "S"
+    },
+    "skipPackageJson": {
+      "type": "boolean",
+      "default": false,
+      "description": "Do not add dependencies to `package.json`.",
+      "x-priority": "internal"
+    },
+    "rootProject": {
+      "description": "Create an application at the root of the workspace.",
+      "type": "boolean",
+      "default": false,
+      "hidden": true,
+      "x-priority": "internal"
+    }
+  },
+  "additionalProperties": false,
+  "required": ["title", "author", "challengeDifficulty", "category"]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "users",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/static-dynamic-import/users/src",
+  "prefix": "sdi",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "inputs": ["{workspaceRoot}/tools/eslint-rules/**/*"]
+    }
+  }
+}

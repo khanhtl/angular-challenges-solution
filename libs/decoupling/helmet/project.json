@@ -1,0 +1,37 @@
+{
+  "name": "decoupling-helmet",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/decoupling/helmet/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["type:hlm"],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:ng-packagr-lite",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "libs/decoupling/helmet/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/decoupling/helmet/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/decoupling/helmet/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "options": {
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "coverage": true
+        }
+      }
+    }
+  }
+}
