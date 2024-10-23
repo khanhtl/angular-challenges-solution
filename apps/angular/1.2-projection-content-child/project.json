@@ -1,0 +1,82 @@
+{
+  "name": "angular-projection-content-child",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/angular/1.2-projection-content-child/src",
+  "prefix": "app",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/angular/1.2-projection-content-child",
+        "index": "apps/angular/1.2-projection-content-child/src/index.html",
+        "browser": "apps/angular/1.2-projection-content-child/src/main.ts",
+        "polyfills": ["apps/angular/1.2-projection-content-child/src/polyfills.ts"],
+        "tsConfig": "apps/angular/1.2-projection-content-child/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/angular/1.2-projection-content-child/src/favicon.ico",
+          "apps/angular/1.2-projection-content-child/src/assets"
+        ],
+        "styles": ["apps/angular/1.2-projection-content-child/src/styles.scss"],
+        "scripts": [],
+        "allowedCommonJsDependencies": ["seedrandom"]
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "angular-projection-content-child:build:production"
+        },
+        "development": {
+          "buildTarget": "angular-projection-content-child:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "angular-projection-content-child:build"
+      }
+    },
+    "test": {
+      "options": {
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "coverage": true
+        }
+      }
+    }
+  }
+}
