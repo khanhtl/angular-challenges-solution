@@ -1,51 +1,63 @@
-import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { randText } from '@ngneat/falso';
+import { TodoService } from './data-access/todo.service';
+import { TodoStore } from './data-access/toto.store';
+import { Todo } from './model/todo.model';
 
 @Component({
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   selector: 'app-root',
   template: `
-    <div *ngFor="let todo of todos">
-      {{ todo.title }}
-      <button (click)="update(todo)">Update</button>
-    </div>
+    @if(!isLoading()) {
+      @for (todo of todos(); track todo.title) {
+        @let $status = todoStatus()[todo.id];
+        @let $isUpdating = !!$status?.isUpdating;
+        @let $isDeleting = !!$status?.isDeleting;
+        @let $disabled = $isUpdating || $isDeleting;
+        <div>
+          {{ todo.title }}
+          <button [disabled]="$disabled" (click)="update(todo)">Update</button>
+          <button [disabled]="$disabled" (click)="delete(todo)">Delete</button>
+          @if($isDeleting) {
+            Deleting...
+          }
+
+          @if($isUpdating) {
+            Updating...
+          }
+
+        </div>
+      }
+    } @else {
+      Loading...
+    }
   `,
   styles: [],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements OnInit {
-  todos!: any[];
+export class AppComponent {
+  #todoService = inject(TodoService);
+  #todoStore = inject(TodoStore);
 
-  constructor(private http: HttpClient) {}
+  todos = this.#todoStore.todos;
+  isLoading = this.#todoStore.isLoading;
+  todoStatus = this.#todoStore.todoStatus;
 
-  ngOnInit(): void {
-    this.http
-      .get<any[]>('https://jsonplaceholder.typicode.com/todos')
-      .subscribe((todos) => {
-        this.todos = todos;
-      });
+  constructor() {
+    this.#todoService.getTodos().subscribe();
   }
 
-  update(todo: any) {
-    this.http
-      .put<any>(
-        `https://jsonplaceholder.typicode.com/todos/${todo.id}`,
-        JSON.stringify({
-          todo: todo.id,
-          title: randText(),
-          body: todo.body,
-          userId: todo.userId,
-        }),
-        {
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-          },
-        },
-      )
-      .subscribe((todoUpdated: any) => {
-        this.todos[todoUpdated.id - 1] = todoUpdated;
-      });
+  delete(todo: Todo) {
+    this.#todoService.deleteTodo(todo).subscribe();
+  }
+
+  update(todo: Todo) {
+    const totoWillbeUpdate: Todo = {
+      id: todo.id,
+      title: randText(),
+      userId: todo.userId,
+    }
+    this.#todoService.updateTodo(totoWillbeUpdate).subscribe();
   }
 }
